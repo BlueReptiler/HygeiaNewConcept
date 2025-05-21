@@ -9,39 +9,71 @@
       padding: 0;
       overflow: hidden;
       background-color: #0a0014;
-      font-family: "Segoe UI", sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       color: white;
     }
     canvas {
-      display: block;
       position: absolute;
       top: 0;
       left: 0;
       z-index: 0;
+      display: block;
     }
-    .content {
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      background: rgba(10, 0, 20, 0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 32px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    .logo-container img {
+      height: 40px;
+      margin-right: 12px;
+    }
+    .logo-container span {
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #6200ea;
+    }
+    .hero {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
       z-index: 2;
-      padding: 2rem;
-      animation: fadeIn 2s ease-in-out;
+      text-align: center;
+      max-width: 600px;
+      padding: 1rem;
+      animation: fadeIn 2s ease;
     }
-    .logo {
-      width: 120px;
-      height: auto;
-      margin-bottom: 20px;
-    }
-    h1 {
+    .hero h1 {
+      font-size: 2.75rem;
       margin-bottom: 10px;
-      font-size: 2.5rem;
     }
-    p {
+    .hero p {
       font-size: 1.2rem;
-      max-width: 400px;
-      margin: 0 auto;
+      line-height: 1.5;
+      opacity: 0.9;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translate(-50%, -60%); }
@@ -52,10 +84,20 @@
 <body>
   <canvas id="particleCanvas"></canvas>
 
-  <div class="content">
-    <img src="Hygeia Logo Badge - Transparent BG.png" alt="Hygeia Logo" class="logo">
-    <h1>Hygeia New Concept</h1>
-    <p>We create modern, user-first apps and websites — built to inspire, designed to scale.</p>
+  <header>
+    <div class="logo-container">
+      <img src="Hygeia Logo Badge - Transparent BG.png" alt="Hygeia Logo">
+      <span>Hygeia New Concept</span>
+    </div>
+    <nav>
+      <a href="#">Marketing</a>
+      <a href="#">IT</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>Innovating Digital Experiences</h1>
+    <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
   </div>
 
   <script>
@@ -118,7 +160,6 @@
           let dx = p1.x - p2.x;
           let dy = p1.y - p2.y;
           let dist = Math.sqrt(dx * dx + dy * dy);
-
           if (dist < LINK_DISTANCE) {
             ctx.strokeStyle = PURPLE;
             ctx.lineWidth = 1;
