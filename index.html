@@ -30,7 +30,7 @@
       left: 0;
       width: 100%;
       z-index: 10;
-      background: rgba(10, 0, 20, 0.3); /* very‑dark purple, 30% opacity */
+      background: rgba(10, 0, 20, 0.3); /* very-dark purple, 30% opacity */
       backdrop-filter: blur(4px);
       display: flex;
       justify-content: space-between;
@@ -107,7 +107,7 @@
       flex-wrap: wrap;
     }
     .footer-left {
-      max-width: 60%;
+      max-width: 70%;
     }
     .footer-right a {
       color: #9c6bff;
@@ -116,6 +116,12 @@
     }
     .footer-right a:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      footer { flex-direction: column; align-items: flex-start; }
+      .footer-left { max-width: 100%; margin-bottom: 8px; }
+      .footer-right a { margin-left: 0; margin-right: 16px; }
     }
   </style>
 </head>
@@ -138,18 +144,18 @@
   <!-- Hero section -->
   <div class="hero">
     <h1>Innovating Digital Experiences</h1>
-    <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high‑impact digital solutions that scale.</p>
+    <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
   </div>
 
   <!-- Footer -->
   <footer>
     <div class="footer-left">
-      © 2025 Hygeia New Concept SRL · CUI 123456789 · Str. Eroilor 21, Cluj‑Napoca, Romania · We craft apps, websites & strategic marketing campaigns that elevate healthcare and wellness brands.
+      © 2025 Hygeia New Concept SRL · CUI 43563547 · Reg. J04/68/2021 · Bld. Unirii 74, 600391 Bacău, Romania
     </div>
     <div class="footer-right">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
-      <a href="#">Contact</a>
+      <a href="mailto:contact@hygeianewconcept.com">Contact</a>
     </div>
   </footer>
 
@@ -187,8 +193,11 @@
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width)  this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        // bounce
+        if (this.x < 0) { this.x = 0; this.vx *= -1; }
+        if (this.x > canvas.width)  { this.x = canvas.width; this.vx *= -1; }
+        if (this.y < 0) { this.y = 0; this.vy *= -1; }
+        if (this.y > canvas.height) { this.y = canvas.height; this.vy *= -1; }
       }
       drawTriangle() {
         ctx.beginPath();
