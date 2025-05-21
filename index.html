@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hygeia New Concept</title>
   <style>
     /* ---- Global styles ---- */
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       overflow: hidden; /* keep scrollbars away */
@@ -28,9 +30,9 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 95%;
+      width: 100%;
       z-index: 10;
-      background: rgba(10, 0, 20, 0.3); /* very-dark purple, 30% opacity */
+      background: rgba(10, 0, 20, 0.3); /* very‑dark purple, 30% opacity */
       backdrop-filter: blur(4px);
       display: flex;
       justify-content: space-between;
@@ -43,7 +45,7 @@
       align-items: center;
     }
     .logo-container img {
-      height: 60px; /* bigger logo */
+      height: 60px;
       width: auto;
       margin-right: 14px;
     }
@@ -51,14 +53,20 @@
       font-size: 1.7rem;
       font-weight: 600;
       letter-spacing: 0.4px;
+      white-space: nowrap;
     }
 
+    nav {
+      display: flex;
+      align-items: center;
+    }
     nav a {
       color: #ffffff;
       text-decoration: none;
       margin-left: 28px;
       font-size: 1.05rem;
       transition: color 0.25s;
+      white-space: nowrap;
     }
     nav a:hover {
       color: #9c6bff; /* lighter purple on hover */
@@ -87,28 +95,30 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, -60%); }
-      to   { opacity: 1; transform: translate(-50%, -50%); }
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
     }
 
     /* ---- Footer ---- */
     footer {
-          position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 5;
-    background: rgba(10,0,20,0.65);
-    color: #ddd;
-    font-size: 0.9rem;
-    padding: 12px 24px;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    align-items: flex-start;
-}
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 5;
+      background: rgba(10, 0, 20, 0.65);
+      color: #ddd;
+      font-size: 0.9rem;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
     .footer-left {
       max-width: 70%;
@@ -122,10 +132,52 @@
       text-decoration: underline;
     }
 
+    /* ---- Responsive tweaks ---- */
     @media (max-width: 768px) {
-      footer { flex-direction: column; align-items: flex-start; }
-      .footer-left { max-width: 100%; margin-bottom: 8px; }
-      .footer-right a { margin-left: 0; margin-right: 16px; }
+      header {
+        padding: 10px 20px;
+      }
+      .logo-container img {
+        height: 42px;
+        margin-right: 10px;
+      }
+      .logo-container span {
+        font-size: 1.3rem;
+      }
+      nav a {
+        font-size: 0.95rem;
+        margin-left: 16px;
+      }
+      .hero h1 {
+        font-size: 2.1rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .footer-left {
+        max-width: 100%;
+        margin-bottom: 8px;
+      }
+      .footer-right a {
+        margin: 0 16px 8px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 1.75rem;
+      }
+      .hero p {
+        font-size: 0.95rem;
+      }
+      nav a {
+        font-size: 0.85rem;
+        margin-left: 12px;
+      }
     }
   </style>
 </head>
@@ -136,7 +188,7 @@
   <!-- Header -->
   <header>
     <div class="logo-container">
-      <img src="Hygeia Logo Badge - Transparent BG.png" alt="Hygeia Logo">
+      <img src="Hygeia Logo Badge - Transparent BG.png" alt="Hygeia Logo" />
       <span>Hygeia New Concept</span>
     </div>
     <nav>
@@ -148,13 +200,18 @@
   <!-- Hero section -->
   <div class="hero">
     <h1>Innovating Digital Experiences</h1>
-    <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
+    <p>
+      Hygeia New Concept builds stunning, responsive apps and websites tailored
+      to modern business needs. We merge design and technology to deliver
+      high‑impact digital solutions that scale.
+    </p>
   </div>
 
   <!-- Footer -->
   <footer>
     <div class="footer-left">
-      © 2025 Hygeia New Concept SRL · CUI 43563547 · Reg. J04/68/2021 · Bld. Unirii 74, 600391 Bacău, Romania
+      © 2025 Hygeia New Concept SRL · CUI 43563547 · Reg. J04/68/2021 · Bld.
+      Unirii 74, 600391 Bacău, Romania
     </div>
     <div class="footer-right">
       <a href="#">Privacy</a>
@@ -165,31 +222,31 @@
 
   <script>
     /* ---- Particle background (no mouse interaction) ---- */
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
 
     function resizeCanvas() {
       const dpr = window.devicePixelRatio || 1;
-      canvas.width  = window.innerWidth  * dpr;
+      canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
-      canvas.style.width  = window.innerWidth  + 'px';
-      canvas.style.height = window.innerHeight + 'px';
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     /* Config */
-    const PARTICLE_COUNT   = 120;
-    const LINK_DISTANCE    = 120;
-    const TRIANGLE_SIZE    = 5;
-    const PURPLE           = 'rgba(98,0,234,0.7)'; // 0.7 opacity
-    const GRAY             = 'rgba(153,153,153,0.4)';
+    const PARTICLE_COUNT = 120;
+    const LINK_DISTANCE = 120;
+    const TRIANGLE_SIZE = 5;
+    const PURPLE = "rgba(98,0,234,0.7)"; // 0.7 opacity
+    const GRAY = "rgba(153,153,153,0.4)";
 
     class Particle {
       constructor() {
-        this.x  = Math.random() * canvas.width;
-        this.y  = Math.random() * canvas.height;
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
         this.vx = (Math.random() - 0.5) * 0.6;
         this.vy = (Math.random() - 0.5) * 0.6;
         this.color = GRAY;
@@ -197,11 +254,23 @@
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        // bounce
-        if (this.x < 0) { this.x = 0; this.vx *= -1; }
-        if (this.x > canvas.width)  { this.x = canvas.width; this.vx *= -1; }
-        if (this.y < 0) { this.y = 0; this.vy *= -1; }
-        if (this.y > canvas.height) { this.y = canvas.height; this.vy *= -1; }
+        // bounce on walls
+        if (this.x < 0) {
+          this.x = 0;
+          this.vx *= -1;
+        }
+        if (this.x > canvas.width) {
+          this.x = canvas.width;
+          this.vx *= -1;
+        }
+        if (this.y < 0) {
+          this.y = 0;
+          this.vy *= -1;
+        }
+        if (this.y > canvas.height) {
+          this.y = canvas.height;
+          this.vy *= -1;
+        }
       }
       drawTriangle() {
         ctx.beginPath();
@@ -217,7 +286,7 @@
     const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
 
     function drawConnections() {
-      particles.forEach(p => p.color = GRAY);
+      particles.forEach((p) => (p.color = GRAY));
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
@@ -240,17 +309,11 @@
     }
 
     function animate() {
-      ctx.fillStyle = '#0a0014';
+      ctx.fillStyle = "#0a0014";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach(p => p.update());
+      particles.forEach((p) => p.update());
       drawConnections();
-      particles.forEach(p => p.drawTriangle());
+      particles.forEach((p) => p.drawTriangle());
 
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-  </script>
-</body>
-</html>
+      requestAnimationFrame(animate
