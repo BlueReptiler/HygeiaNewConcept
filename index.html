@@ -92,17 +92,22 @@
 
     /* ---- Footer ---- */
     footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      z-index: 5;
-      background: rgba(10,0,20,0.65);
-      color: #ddd;
-      font-size: 0.9rem;
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
+          position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    background: rgba(10,0,20,0.65);
+    color: #ddd;
+    font-size: 0.9rem;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: center;
+    align-items: flex-start;
+}
     }
     .footer-left {
       max-width: 70%;
