@@ -1,12 +1,148 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hygeia New Concept</title>
-  </head>
-  <body style="font-family: sans-serif; max-width: 600px; margin: auto; padding-top: 50px;">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hygeia New Concept</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #0a0014;
+      font-family: "Segoe UI", sans-serif;
+      color: white;
+    }
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 2;
+      padding: 2rem;
+      animation: fadeIn 2s ease-in-out;
+    }
+    .logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.2rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="content">
+    <img src="Hygeia Logo Badge - Transparent BG.png" alt="Hygeia Logo" class="logo">
     <h1>Hygeia New Concept</h1>
-    <p>We create forward-thinking software solutions for modern businesses.</p>
-    <p>Contact us at: contact@acme-innovations.com</p>
-  </body>
+    <p>We create modern, user-first apps and websites — built to inspire, designed to scale.</p>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    const PARTICLE_COUNT = 120;
+    const LINK_DISTANCE = 120;
+    const TRIANGLE_SIZE = 5;
+    const PURPLE = "#6200ea";
+    const GRAY = "#999999";
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.color = GRAY;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+
+      drawTriangle(ctx, color) {
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y - TRIANGLE_SIZE);
+        ctx.lineTo(this.x - TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
+        ctx.lineTo(this.x + TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+      }
+    }
+
+    const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
+
+    function drawConnections() {
+      particles.forEach(p => p.color = GRAY);
+      for (let i = 0; i < particles.length; i++) {
+        let p1 = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          let p2 = particles[j];
+          let dx = p1.x - p2.x;
+          let dy = p1.y - p2.y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < LINK_DISTANCE) {
+            ctx.strokeStyle = PURPLE;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+            p1.color = PURPLE;
+            p2.color = PURPLE;
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.fillStyle = "#0a0014";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => p.update());
+      drawConnections();
+      particles.forEach(p => p.drawTriangle(ctx, p.color));
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
 </html>
