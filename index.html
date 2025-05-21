@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Hygeia New Concept</title>
   <style>
     html, body {
@@ -25,7 +25,7 @@
       left: 0;
       width: 100%;
       z-index: 10;
-      background: rgba(10, 0, 20, 0.8);
+      background: linear-gradient(90deg, #6200ea 0%, #3700b3 100%);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -37,11 +37,11 @@
       align-items: center;
     }
     .logo-container img {
-      height: 40px;
+      height: 60px;
       margin-right: 12px;
     }
     .logo-container span {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: bold;
       letter-spacing: 0.5px;
     }
@@ -49,11 +49,11 @@
       color: white;
       text-decoration: none;
       margin-left: 24px;
-      font-size: 1rem;
+      font-size: 1.1rem;
       transition: color 0.3s;
     }
     nav a:hover {
-      color: #6200ea;
+      color: #bb86fc;
     }
     .hero {
       position: absolute;
@@ -74,6 +74,18 @@
       font-size: 1.2rem;
       line-height: 1.5;
       opacity: 0.9;
+    }
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(10, 0, 20, 0.9);
+      color: #ccc;
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      z-index: 10;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translate(-50%, -60%); }
@@ -99,6 +111,10 @@
     <h1>Innovating Digital Experiences</h1>
     <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
   </div>
+
+  <footer>
+    <p>Hygeia New Concept SRL &copy; 2025 | Bdul. Unirii 74, Bacau, Romania | CUI: 43563547</p>
+  </footer>
 
   <script>
     const canvas = document.getElementById("particleCanvas");
@@ -151,6 +167,15 @@
 
     const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
 
+    let mouseX = canvas.width / 2;
+    let mouseY = canvas.height / 2;
+
+    canvas.addEventListener("mousemove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+      mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+    });
+
     function drawConnections() {
       particles.forEach(p => p.color = GRAY);
       for (let i = 0; i < particles.length; i++) {
@@ -160,7 +185,9 @@
           let dx = p1.x - p2.x;
           let dy = p1.y - p2.y;
           let dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < LINK_DISTANCE) {
+          let mouseDist1 = Math.sqrt((p1.x - mouseX) ** 2 + (p1.y - mouseY) ** 2);
+          let mouseDist2 = Math.sqrt((p2.x - mouseX) ** 2 + (p2.y - mouseY) ** 2);
+          if (dist < LINK_DISTANCE && mouseDist1 < 200 && mouseDist2 < 200) {
             ctx.strokeStyle = PURPLE;
             ctx.lineWidth = 1;
             ctx.beginPath();
