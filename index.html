@@ -4,39 +4,31 @@
   <meta charset="UTF-8" />
   <title>Hygeia New Concept</title>
   <style>
-    /* ---- Global styles ---- */
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #0a0014; /* fallback bg */
+      background-color: #0a0014;
       font-family: "Segoe UI", sans-serif;
       color: #ffffff;
       scroll-behavior: smooth;
-      overflow-x: hidden; /* prevent horizontal scrollbar */
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
-    /* ---- Canvas ---- */
     canvas {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 0; /* behind everything */
-      display: block;
-      width: 100vw;
-      height: 100vh;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
     }
 
-    /* ---- Header ---- */
     header {
       position: fixed;
       top: 0;
       left: 0;
-      width: 95%;
+      width: 100%;
       z-index: 10;
-      background: rgba(10, 0, 20, 0.3); /* very-dark purple, 30% opacity */
+      background: rgba(10, 0, 20, 0.3);
       backdrop-filter: blur(4px);
       display: flex;
       justify-content: space-between;
@@ -44,19 +36,21 @@
       padding: 14px 36px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
     }
+
     .logo-container {
       display: flex;
       align-items: center;
     }
+
     .logo-container img {
-      height: 60px; /* bigger logo */
+      height: 60px;
       width: auto;
       margin-right: 14px;
     }
+
     .logo-container span {
       font-size: 1.7rem;
       font-weight: 600;
-      letter-spacing: 0.4px;
     }
 
     nav a {
@@ -64,309 +58,247 @@
       text-decoration: none;
       margin-left: 28px;
       font-size: 1.05rem;
-      transition: color 0.25s;
-    }
-    nav a:hover,
-    nav a:focus {
-      color: #9c6bff; /* lighter purple on hover */
     }
 
-    /* ---- Hero ---- */
-    .hero {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      text-align: center;
-      max-width: 640px;
-      padding: 1rem;
-      animation: fadeIn 2s ease;
+    nav a:hover {
+      color: #9c6bff;
     }
+
+    .hero {
+      text-align: center;
+      padding: 150px 20px 60px;
+      z-index: 2;
+      position: relative;
+    }
+
     .hero h1 {
       font-size: 2.75rem;
       margin-bottom: 12px;
     }
+
     .hero p {
       font-size: 1.2rem;
-      line-height: 1.55;
       opacity: 0.9;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, -60%); }
-      to   { opacity: 1; transform: translate(-50%, -50%); }
-    }
-
-    /* ---- Sections ---- */
     main {
-      flex: 1 0 auto;
-    }
-    section.content-section {
+      padding: 40px 5%;
       position: relative;
       z-index: 2;
-      padding: 120px 36px 80px;
-      min-height: 100vh;
-      scroll-margin-top: 120px; /* ensures section is not hidden under header */
-    }
-    section.content-section h2 {
-      font-size: 2.25rem;
-      margin-top: 0;
-      color: #9c6bff;
-    }
-    .subsection {
-      margin-top: 48px;
-    }
-    .subsection h3 {
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-      color: #9c6bff;
     }
 
-    /* ---- Forms & Buttons ---- */
+    section {
+      margin-bottom: 80px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 30px;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #6200ea;
+    }
+
+    .half {
+      flex: 1 1 45%;
+    }
+
     textarea {
       width: 100%;
-      max-width: 560px;
-      background: rgba(255,255,255,0.1);
-      color: #ffffff;
-      border: 2px solid #6200ea;
+      padding: 10px;
+      background: #150028;
+      color: #fff;
+      border: 1px solid #6200ea;
       border-radius: 8px;
-      padding: 12px;
-      font-size: 1rem;
       resize: vertical;
-      min-height: 120px;
+      min-height: 100px;
     }
+
     .btn {
       display: inline-block;
-      background: #6200ea;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 28px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      background-color: #6200ea;
+      color: #fff;
+      padding: 12px 20px;
       text-decoration: none;
+      border-radius: 8px;
       margin-top: 12px;
+      transition: background 0.3s;
     }
-    .btn:hover,
-    .btn:focus {
-      background: #7e3ff2;
+
+    .btn:hover {
+      background-color: #7e34ff;
     }
-    ul.app-list {
-      list-style: none;
-      padding: 0;
+
+    ul {
+      padding-left: 20px;
     }
-    .app-list li {
-      margin-bottom: 10px;
-      font-size: 1.05rem;
+
+    ul li {
+      margin-bottom: 8px;
     }
-    .app-list a {
+
+    ul li a {
       color: #9c6bff;
       text-decoration: none;
     }
-    .app-list a:hover,
-    .app-list a:focus {
+
+    ul li a:hover {
       text-decoration: underline;
     }
 
-    /* ---- Footer ---- */
     footer {
+      padding: 30px 5%;
       background: rgba(10,0,20,0.65);
       color: #ddd;
       font-size: 0.9rem;
-      padding: 24px;
-      display: flex;
-      justify-content: space-evenly;
-      flex-wrap: wrap;
-      flex-direction: row;
-      align-content: center;
-      align-items: flex-start;
-      flex-shrink: 0;
-    }
-    .footer-left {
-      max-width: 70%;
-    }
-    .footer-right a {
-      color: #9c6bff;
-      text-decoration: none;
-      margin-left: 20px;
-    }
-    .footer-right a:hover {
-      text-decoration: underline;
+      z-index: 2;
     }
 
     @media (max-width: 768px) {
-      footer { flex-direction: column; align-items: flex-start; }
-      .footer-left { max-width: 100%; margin-bottom: 8px; }
-      .footer-right a { margin-left: 0; margin-right: 16px; }
+      section {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Canvas for particle background -->
-  <canvas id="particleCanvas"></canvas>
+<canvas id="particleCanvas"></canvas>
 
-  <!-- Header -->
-  <header>
-    <div class="logo-container">
-      <img src="Hygeia Logo Badge - Transparent BG.png" alt="Hygeia Logo">
-      <span>Hygeia New Concept</span>
-    </div>
-    <nav>
-      <a href="#marketing">Marketing</a>
-      <a href="#it">IT</a>
-    </nav>
-  </header>
-
-  <!-- Hero section -->
-  <div class="hero">
-    <h1>Innovating Digital Experiences</h1>
-    <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
+<header>
+  <div class="logo-container">
+    <img src="Hygeia Logo Badge - Transparent BG.png" alt="Hygeia Logo">
+    <span>Hygeia New Concept</span>
   </div>
+  <nav>
+    <a href="#marketing">Marketing</a>
+    <a href="#it">IT</a>
+  </nav>
+</header>
 
-  <!-- Main content -->
-  <main>
-    <!-- IT Section -->
-    <section id="it" class="content-section">
-      <h2>IT</h2>
+<div class="hero">
+  <h1>Innovating Digital Experiences</h1>
+  <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
+</div>
 
-      <!-- Subsection 1 -->
-      <div class="subsection">
-        <h3>Request quota for an app</h3>
-        <form id="quotaForm" action="mailto:contact@hygeianewconcept.com" method="post" enctype="text/plain">
-          <textarea name="description" placeholder="Brief description of your app idea" required></textarea>
-          <button type="submit" class="btn">Send Request</button>
-        </form>
-      </div>
-
-      <!-- Subsection 2 -->
-      <div class="subsection">
-        <h3>Our Apps &amp; Games</h3>
-        <ul class="app-list">
-          <li>The Bezt Shaorma (Android) – <a href="https://play.google.com/store/apps/details?id=com.HNCGames.TheBeztShaorma" target="_blank" rel="noopener">Google Play</a></li>
-          <li>CoonBucks – 
-            <a href="https://play.google.com/store/apps/details?id=com.hncapps.coonbucks" target="_blank" rel="noopener">Google Play</a> | 
-            <a href="https://apps.apple.com/ca/app/coonbucks/id6738510492" target="_blank" rel="noopener">App Store</a>
-          </li>
-          <li>Lashmap – 
-            <a href="https://play.google.com/store/apps/details?id=com.hncapps.lashmap" target="_blank" rel="noopener">Google Play</a> | 
-            <a href="https://apps.apple.com/br/app/lash-mapping/id6657995146" target="_blank" rel="noopener">App Store</a>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Marketing Section -->
-    <section id="marketing" class="content-section">
-      <h2>Marketing</h2>
-      <div class="subsection">
-        <h3>Digital Billboard – Bulevardul Unirii 74, Bacău</h3>
-        <p><strong>1500 RON / month</strong></p>
-        <a class="btn" href="mailto:contact@hygeianewconcept.com?subject=Interested%20in%20Digital%20Billboard">I'm Interested</a>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-left">
-      © 2025 Hygeia New Concept SRL · CUI 43563547 · Reg. J04/68/2021 · Bld. Unirii 74, 600391 Bacău, Romania
+<main>
+  <section id="it">
+    <div class="half">
+      <h2>Request Quota for an App</h2>
+      <p>Briefly describe your app idea:</p>
+      <textarea id="appDesc" placeholder="Example: A food delivery app for vegan dishes..."></textarea>
+      <a class="btn" href="#" onclick="sendQuota()">Send Request</a>
     </div>
-    <div class="footer-right">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="mailto:contact@hygeianewconcept.com">Contact</a>
+    <div class="half">
+      <h2>Our Apps & Games</h2>
+      <ul>
+        <li><a href="https://play.google.com/store/apps/details?id=com.hygeia.beztshaorma" target="_blank" rel="noopener">The Bezt Shaorma (Game)</a></li>
+        <li><a href="https://play.google.com/store/apps/details?id=com.hygeia.coonbucks" target="_blank" rel="noopener">CoonBucks – Play Store</a></li>
+        <li><a href="https://apps.apple.com/app/id6474855267" target="_blank" rel="noopener">CoonBucks – App Store</a></li>
+        <li><a href="https://play.google.com/store/apps/details?id=com.hygeia.lashmap" target="_blank" rel="noopener">Lashmap – Play Store</a></li>
+        <li><a href="https://apps.apple.com/app/id6474956953" target="_blank" rel="noopener">Lashmap – App Store</a></li>
+      </ul>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    /* ---- Particle background ---- */
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
+  <section id="marketing">
+    <div class="half">
+      <h2>Digital Billboard – Bacau</h2>
+      <p>Location: Bulevardul Unirii 74<br>Price: <strong>1500 RON / month</strong></p>
+      <a class="btn" href="mailto:contact@hygeianewconcept.com?subject=Billboard Inquiry - Bacau&body=Hello, I'm interested in advertising on your digital billboard at Bulevardul Unirii 74. Please contact me with more details.">I’m Interested</a>
+    </div>
+  </section>
+</main>
 
-    function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width  = window.innerWidth  * dpr;
-      canvas.height = window.innerHeight * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+<footer>
+  © 2025 Hygeia New Concept SRL · CUI 43563547 · Reg. J04/68/2021 · Bld. Unirii 74, 600391 Bacău, Romania
+</footer>
 
-    /* Config */
-    const PARTICLE_COUNT   = 120;
-    const LINK_DISTANCE    = 120;
-    const TRIANGLE_SIZE    = 5;
-    const PURPLE           = 'rgba(98,0,234,0.7)'; // 0.7 opacity
-    const GRAY             = 'rgba(153,153,153,0.4)';
+<script>
+function sendQuota() {
+  const desc = document.getElementById('appDesc').value;
+  const subject = encodeURIComponent("App Quota Request");
+  const body = encodeURIComponent("Hello, I would like to request a quota for the following app idea:\n\n" + desc);
+  window.location.href = `mailto:contact@hygeianewconcept.com?subject=${subject}&body=${body}`;
+}
 
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x  = Math.random() * canvas.width;
-        this.y  = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
-        this.color = GRAY;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-          this.reset();
-        }
-      }
-      drawTriangle() {
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const PARTICLE_COUNT = 120;
+const LINK_DISTANCE = 120;
+const TRIANGLE_SIZE = 5;
+const PURPLE = 'rgba(98,0,234,0.7)';
+const GRAY = 'rgba(153,153,153,0.4)';
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.color = GRAY;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y - TRIANGLE_SIZE);
+    ctx.lineTo(this.x - TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
+    ctx.lineTo(this.x + TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
+    ctx.closePath();
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+}
+
+const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
+
+function drawConnections() {
+  particles.forEach(p => p.color = GRAY);
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < LINK_DISTANCE) {
+        ctx.strokeStyle = PURPLE;
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(this.x, this.y - TRIANGLE_SIZE);
-        ctx.lineTo(this.x - TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
-        ctx.lineTo(this.x + TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
-        ctx.closePath();
-        ctx.fillStyle = this.color;
-        ctx.fill();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+        particles[i].color = PURPLE;
+        particles[j].color = PURPLE;
       }
     }
+  }
+}
 
-    const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
-
-    function drawConnections() {
-      particles.forEach(p => p.color = GRAY);
-      for (let i = 0; i < particles.length; i++) {
-        const p1 = particles[i];
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < LINK_DISTANCE) {
-            ctx.strokeStyle = PURPLE;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
-            p1.color = PURPLE;
-            p2.color = PURPLE;
-          }
-        }
-      }
-    }
-
-    function animate() {
-      ctx.fillStyle = '#0a0014';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach(p => p.update());
-      drawConnections();
-      particles.forEach(p => p.drawTriangle());
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-  </script>
+function animate() {
+  ctx.fillStyle = '#0a0014';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => p.update());
+  drawConnections();
+  particles.forEach(p => p.draw());
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
 </body>
 </html>
