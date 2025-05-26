@@ -5,28 +5,28 @@
   <title>Hygeia New Concept</title>
   <style>
     /* ---- Global styles ---- */
-    html {
-      scroll-behavior: smooth;
-    }
     html, body {
       margin: 0;
       padding: 0;
-      /* allow scrolling now */
-      background-color: #0a0014;
+      background-color: #0a0014; /* fallback bg */
       font-family: "Segoe UI", sans-serif;
       color: #ffffff;
+      scroll-behavior: smooth;
+      overflow-x: hidden; /* prevent horizontal scrollbar */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ---- Canvas ---- */
     canvas {
-      position: fixed; /* stay fixed so particles cover the viewport during scroll */
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
       z-index: 0; /* behind everything */
       display: block;
-      pointer-events: none;
+      width: 100vw;
+      height: 100vh;
     }
 
     /* ---- Header ---- */
@@ -34,9 +34,9 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
+      width: 95%;
       z-index: 10;
-      background: rgba(10, 0, 20, 0.3);
+      background: rgba(10, 0, 20, 0.3); /* very-dark purple, 30% opacity */
       backdrop-filter: blur(4px);
       display: flex;
       justify-content: space-between;
@@ -49,7 +49,7 @@
       align-items: center;
     }
     .logo-container img {
-      height: 60px;
+      height: 60px; /* bigger logo */
       width: auto;
       margin-right: 14px;
     }
@@ -66,8 +66,9 @@
       font-size: 1.05rem;
       transition: color 0.25s;
     }
-    nav a:hover {
-      color: #6200ea; /* hygeia purple */
+    nav a:hover,
+    nav a:focus {
+      color: #9c6bff; /* lighter purple on hover */
     }
 
     /* ---- Hero ---- */
@@ -98,62 +99,75 @@
     }
 
     /* ---- Sections ---- */
-    .content {
+    main {
+      flex: 1 0 auto;
+    }
+    section.content-section {
       position: relative;
       z-index: 2;
-      /* push content so it begins below hero */
-      margin-top: 100vh;
-    }
-    section {
-      padding: 120px 36px 80px; /* generous padding for readability */
+      padding: 120px 36px 80px;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      scroll-margin-top: 120px; /* ensures section is not hidden under header */
     }
-    section h2 {
-      font-size: 2.2rem;
-      margin-bottom: 28px;
-      color: #6200ea;
+    section.content-section h2 {
+      font-size: 2.25rem;
+      margin-top: 0;
+      color: #9c6bff;
     }
-    section h3 {
-      font-size: 1.45rem;
-      margin-top: 24px;
+    .subsection {
+      margin-top: 48px;
+    }
+    .subsection h3 {
+      font-size: 1.5rem;
       margin-bottom: 12px;
-      color: #ffffff;
-    }
-    .btn {
-      background: #6200ea;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      color: #ffffff;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      transition: background 0.3s;
-    }
-    .btn:hover {
-      background: #7943ff;
+      color: #9c6bff;
     }
 
-    /* IT subsection specific */
-    .quota-form textarea {
+    /* ---- Forms & Buttons ---- */
+    textarea {
       width: 100%;
-      min-height: 120px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      padding: 12px 14px;
+      max-width: 560px;
+      background: rgba(255,255,255,0.1);
       color: #ffffff;
+      border: 2px solid #6200ea;
+      border-radius: 8px;
+      padding: 12px;
       font-size: 1rem;
       resize: vertical;
+      min-height: 120px;
     }
-    .quota-form label {
-      display: block;
-      margin-bottom: 8px;
+    .btn {
+      display: inline-block;
+      background: #6200ea;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-decoration: none;
+      margin-top: 12px;
+    }
+    .btn:hover,
+    .btn:focus {
+      background: #7e3ff2;
+    }
+    ul.app-list {
+      list-style: none;
+      padding: 0;
+    }
+    .app-list li {
+      margin-bottom: 10px;
       font-size: 1.05rem;
+    }
+    .app-list a {
+      color: #9c6bff;
+      text-decoration: none;
+    }
+    .app-list a:hover,
+    .app-list a:focus {
+      text-decoration: underline;
     }
 
     /* ---- Footer ---- */
@@ -161,25 +175,27 @@
       background: rgba(10,0,20,0.65);
       color: #ddd;
       font-size: 0.9rem;
-      padding: 24px 36px;
+      padding: 24px;
       display: flex;
       justify-content: space-evenly;
       flex-wrap: wrap;
       flex-direction: row;
       align-content: center;
       align-items: flex-start;
+      flex-shrink: 0;
     }
     .footer-left {
       max-width: 70%;
     }
     .footer-right a {
-      color: #6200ea;
+      color: #9c6bff;
       text-decoration: none;
       margin-left: 20px;
     }
     .footer-right a:hover {
       text-decoration: underline;
     }
+
     @media (max-width: 768px) {
       footer { flex-direction: column; align-items: flex-start; }
       .footer-left { max-width: 100%; margin-bottom: 8px; }
@@ -209,43 +225,53 @@
     <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
   </div>
 
-  <!-- Main content wrapper (starts after hero) -->
-  <div class="content">
+  <!-- Main content -->
+  <main>
     <!-- IT Section -->
-    <section id="it">
-      <h2>IT Services</h2>
+    <section id="it" class="content-section">
+      <h2>IT</h2>
 
-      <!-- Subsection 1: Quota request -->
-      <h3>1. Request a quota for a new app</h3>
-      <form class="quota-form" action="mailto:contact@hygeianewconcept.com" method="post" enctype="text/plain">
-        <label for="app-desc">Briefly describe your app idea</label>
-        <textarea id="app-desc" name="App description" placeholder="Tell us what you have in mind..."></textarea>
-        <br>
-        <button class="btn" type="submit">Send request</button>
-      </form>
+      <!-- Subsection 1 -->
+      <div class="subsection">
+        <h3>Request quota for an app</h3>
+        <form id="quotaForm" action="mailto:contact@hygeianewconcept.com" method="post" enctype="text/plain">
+          <textarea name="description" placeholder="Brief description of your app idea" required></textarea>
+          <button type="submit" class="btn">Send Request</button>
+        </form>
+      </div>
 
-      <!-- Subsection 2: Our apps & games -->
-      <h3>2. Our apps & games</h3>
-      <ul>
-        <li><a class="btn" href="#" target="_blank" rel="noopener">The Bezt Shaorma game</a></li>
-        <li><a class="btn" href="#" target="_blank" rel="noopener">CoonBucks app</a></li>
-        <li><a class="btn" href="#" target="_blank" rel="noopener">Lashmap app</a></li>
-      </ul>
+      <!-- Subsection 2 -->
+      <div class="subsection">
+        <h3>Our Apps &amp; Games</h3>
+        <ul class="app-list">
+          <li>The Bezt Shaorma (Android) – <a href="https://play.google.com/store/apps/details?id=com.HNCGames.TheBeztShaorma" target="_blank" rel="noopener">Google Play</a></li>
+          <li>CoonBucks – 
+            <a href="https://play.google.com/store/apps/details?id=com.hncapps.coonbucks" target="_blank" rel="noopener">Google Play</a> | 
+            <a href="https://apps.apple.com/ca/app/coonbucks/id6738510492" target="_blank" rel="noopener">App Store</a>
+          </li>
+          <li>Lashmap – 
+            <a href="https://play.google.com/store/apps/details?id=com.hncapps.lashmap" target="_blank" rel="noopener">Google Play</a> | 
+            <a href="https://apps.apple.com/br/app/lash-mapping/id6657995146" target="_blank" rel="noopener">App Store</a>
+          </li>
+        </ul>
+      </div>
     </section>
 
     <!-- Marketing Section -->
-    <section id="marketing">
+    <section id="marketing" class="content-section">
       <h2>Marketing</h2>
-      <p>Digital Billboard in Bacău at Bulevardul Unirii 74</p>
-      <p><strong>Price:</strong> 1500 RON / month</p>
-      <a class="btn" href="mailto:contact@hygeianewconcept.com?subject=Billboard%20Inquiry%3A%20Bacau%20Digital%20Billboard&body=Hello%20Hygeia%20New%20Concept%2C%0D%0A%0D%0AI%20am%20interested%20in%20the%20digital%20billboard%20advertising%20opportunity%20at%20Bulevardul%20Unirii%2074.%20Please%20send%20me%20more%20details.%0D%0A">I'm interested</a>
+      <div class="subsection">
+        <h3>Digital Billboard – Bulevardul Unirii 74, Bacău</h3>
+        <p><strong>1500 RON / month</strong></p>
+        <a class="btn" href="mailto:contact@hygeianewconcept.com?subject=Interested%20in%20Digital%20Billboard">I'm Interested</a>
+      </div>
     </section>
-  </div>
+  </main>
 
   <!-- Footer -->
   <footer>
     <div class="footer-left">
-      © 2025 Hygeia New Concept SRL · CUI 43563547 · Reg. J04/68/2021 · Bld. Unirii 74, 600391 Bacău, Romania
+      © 2025 Hygeia New Concept SRL · CUI 43563547 · Reg. J04/68/2021 · Bld. Unirii 74, 600391 Bacău, Romania
     </div>
     <div class="footer-right">
       <a href="#">Privacy</a>
@@ -255,7 +281,7 @@
   </footer>
 
   <script>
-    /* ---- Particle background (viewport-fixed) ---- */
+    /* ---- Particle background ---- */
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -272,7 +298,7 @@
     const PARTICLE_COUNT   = 120;
     const LINK_DISTANCE    = 120;
     const TRIANGLE_SIZE    = 5;
-    const PURPLE           = 'rgba(98,0,234,0.7)';
+    const PURPLE           = 'rgba(98,0,234,0.7)'; // 0.7 opacity
     const GRAY             = 'rgba(153,153,153,0.4)';
 
     class Particle {
@@ -289,11 +315,9 @@
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        // wrap around edges to keep particles filling viewport
-        if (this.x < 0) this.x = canvas.width;
-        if (this.x > canvas.width) this.x = 0;
-        if (this.y < 0) this.y = canvas.height;
-        if (this.y > canvas.height) this.y = 0;
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.reset();
+        }
       }
       drawTriangle() {
         ctx.beginPath();
