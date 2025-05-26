@@ -5,22 +5,28 @@
   <title>Hygeia New Concept</title>
   <style>
     /* ---- Global styles ---- */
+    html {
+      scroll-behavior: smooth;
+    }
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden; /* keep scrollbars away */
-      background-color: #0a0014; /* fallback bg */
+      /* allow scrolling now */
+      background-color: #0a0014;
       font-family: "Segoe UI", sans-serif;
       color: #ffffff;
     }
 
     /* ---- Canvas ---- */
     canvas {
-      position: absolute;
+      position: fixed; /* stay fixed so particles cover the viewport during scroll */
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 0; /* behind everything */
       display: block;
+      pointer-events: none;
     }
 
     /* ---- Header ---- */
@@ -28,9 +34,9 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 95%;
+      width: 100%;
       z-index: 10;
-      background: rgba(10, 0, 20, 0.3); /* very-dark purple, 30% opacity */
+      background: rgba(10, 0, 20, 0.3);
       backdrop-filter: blur(4px);
       display: flex;
       justify-content: space-between;
@@ -43,7 +49,7 @@
       align-items: center;
     }
     .logo-container img {
-      height: 60px; /* bigger logo */
+      height: 60px;
       width: auto;
       margin-right: 14px;
     }
@@ -61,7 +67,7 @@
       transition: color 0.25s;
     }
     nav a:hover {
-      color: #9c6bff; /* lighter purple on hover */
+      color: #6200ea; /* hygeia purple */
     }
 
     /* ---- Hero ---- */
@@ -91,37 +97,89 @@
       to   { opacity: 1; transform: translate(-50%, -50%); }
     }
 
+    /* ---- Sections ---- */
+    .content {
+      position: relative;
+      z-index: 2;
+      /* push content so it begins below hero */
+      margin-top: 100vh;
+    }
+    section {
+      padding: 120px 36px 80px; /* generous padding for readability */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    section h2 {
+      font-size: 2.2rem;
+      margin-bottom: 28px;
+      color: #6200ea;
+    }
+    section h3 {
+      font-size: 1.45rem;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+    .btn {
+      background: #6200ea;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #7943ff;
+    }
+
+    /* IT subsection specific */
+    .quota-form textarea {
+      width: 100%;
+      min-height: 120px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    .quota-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
     /* ---- Footer ---- */
     footer {
-          position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 5;
-    background: rgba(10,0,20,0.65);
-    color: #ddd;
-    font-size: 0.9rem;
-    padding: 12px 24px;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    align-items: flex-start;
-}
+      background: rgba(10,0,20,0.65);
+      color: #ddd;
+      font-size: 0.9rem;
+      padding: 24px 36px;
+      display: flex;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-content: center;
+      align-items: flex-start;
     }
     .footer-left {
       max-width: 70%;
     }
     .footer-right a {
-      color: #9c6bff;
+      color: #6200ea;
       text-decoration: none;
       margin-left: 20px;
     }
     .footer-right a:hover {
       text-decoration: underline;
     }
-
     @media (max-width: 768px) {
       footer { flex-direction: column; align-items: flex-start; }
       .footer-left { max-width: 100%; margin-bottom: 8px; }
@@ -140,8 +198,8 @@
       <span>Hygeia New Concept</span>
     </div>
     <nav>
-      <a href="#">Marketing</a>
-      <a href="#">IT</a>
+      <a href="#marketing">Marketing</a>
+      <a href="#it">IT</a>
     </nav>
   </header>
 
@@ -149,6 +207,39 @@
   <div class="hero">
     <h1>Innovating Digital Experiences</h1>
     <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
+  </div>
+
+  <!-- Main content wrapper (starts after hero) -->
+  <div class="content">
+    <!-- IT Section -->
+    <section id="it">
+      <h2>IT Services</h2>
+
+      <!-- Subsection 1: Quota request -->
+      <h3>1. Request a quota for a new app</h3>
+      <form class="quota-form" action="mailto:contact@hygeianewconcept.com" method="post" enctype="text/plain">
+        <label for="app-desc">Briefly describe your app idea</label>
+        <textarea id="app-desc" name="App description" placeholder="Tell us what you have in mind..."></textarea>
+        <br>
+        <button class="btn" type="submit">Send request</button>
+      </form>
+
+      <!-- Subsection 2: Our apps & games -->
+      <h3>2. Our apps & games</h3>
+      <ul>
+        <li><a class="btn" href="#" target="_blank" rel="noopener">The Bezt Shaorma game</a></li>
+        <li><a class="btn" href="#" target="_blank" rel="noopener">CoonBucks app</a></li>
+        <li><a class="btn" href="#" target="_blank" rel="noopener">Lashmap app</a></li>
+      </ul>
+    </section>
+
+    <!-- Marketing Section -->
+    <section id="marketing">
+      <h2>Marketing</h2>
+      <p>Digital Billboard in Bacău at Bulevardul Unirii 74</p>
+      <p><strong>Price:</strong> 1500 RON / month</p>
+      <a class="btn" href="mailto:contact@hygeianewconcept.com?subject=Billboard%20Inquiry%3A%20Bacau%20Digital%20Billboard&body=Hello%20Hygeia%20New%20Concept%2C%0D%0A%0D%0AI%20am%20interested%20in%20the%20digital%20billboard%20advertising%20opportunity%20at%20Bulevardul%20Unirii%2074.%20Please%20send%20me%20more%20details.%0D%0A">I'm interested</a>
+    </section>
   </div>
 
   <!-- Footer -->
@@ -164,7 +255,7 @@
   </footer>
 
   <script>
-    /* ---- Particle background (no mouse interaction) ---- */
+    /* ---- Particle background (viewport-fixed) ---- */
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -172,8 +263,6 @@
       const dpr = window.devicePixelRatio || 1;
       canvas.width  = window.innerWidth  * dpr;
       canvas.height = window.innerHeight * dpr;
-      canvas.style.width  = window.innerWidth  + 'px';
-      canvas.style.height = window.innerHeight + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resizeCanvas();
@@ -183,11 +272,14 @@
     const PARTICLE_COUNT   = 120;
     const LINK_DISTANCE    = 120;
     const TRIANGLE_SIZE    = 5;
-    const PURPLE           = 'rgba(98,0,234,0.7)'; // 0.7 opacity
+    const PURPLE           = 'rgba(98,0,234,0.7)';
     const GRAY             = 'rgba(153,153,153,0.4)';
 
     class Particle {
       constructor() {
+        this.reset();
+      }
+      reset() {
         this.x  = Math.random() * canvas.width;
         this.y  = Math.random() * canvas.height;
         this.vx = (Math.random() - 0.5) * 0.6;
@@ -197,11 +289,11 @@
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        // bounce
-        if (this.x < 0) { this.x = 0; this.vx *= -1; }
-        if (this.x > canvas.width)  { this.x = canvas.width; this.vx *= -1; }
-        if (this.y < 0) { this.y = 0; this.vy *= -1; }
-        if (this.y > canvas.height) { this.y = canvas.height; this.vy *= -1; }
+        // wrap around edges to keep particles filling viewport
+        if (this.x < 0) this.x = canvas.width;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.y < 0) this.y = canvas.height;
+        if (this.y > canvas.height) this.y = 0;
       }
       drawTriangle() {
         ctx.beginPath();
