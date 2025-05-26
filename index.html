@@ -5,10 +5,14 @@
   <title>Hygeia New Concept</title>
   <style>
     /* ---- Global styles ---- */
+    html {
+      scroll-behavior: smooth; /* enable smooth anchor scrolling */
+    }
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden; /* keep scrollbars away */
+      overflow-x: hidden;   /* allow vertical scroll, keep x clipped */
+      overflow-y: auto;
       background-color: #0a0014; /* fallback bg */
       font-family: "Segoe UI", sans-serif;
       color: #ffffff;
@@ -91,24 +95,77 @@
       to   { opacity: 1; transform: translate(-50%, -50%); }
     }
 
+    /* ---- Re‑usable content section styles ---- */
+    .content-section {
+      position: relative;
+      z-index: 2; /* above particles */
+      min-height: 100vh;
+      padding: 120px 40px 60px; /* leave room for header */
+      box-sizing: border-box;
+    }
+    .content-section h2 {
+      font-size: 2.2rem;
+      margin-bottom: 24px;
+      color: #9c6bff;
+    }
+    .subsection {
+      margin-bottom: 48px;
+    }
+    .subsection h3 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: #b38bff;
+    }
+    /* simple form */
+    form label {
+      display: block;
+      margin-bottom: 6px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 560px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 1rem;
+      color: #ffffff;
+      resize: vertical;
+    }
+
+    /* buttons */
+    .btn {
+      display: inline-block;
+      margin-top: 14px;
+      background: #9c6bff;
+      color: #ffffff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-decoration: none;
+    }
+    .btn:hover { background: #b38bff; }
+
     /* ---- Footer ---- */
     footer {
-          position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 5;
-    background: rgba(10,0,20,0.65);
-    color: #ddd;
-    font-size: 0.9rem;
-    padding: 12px 24px;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    align-items: flex-start;
-}
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 5;
+      background: rgba(10,0,20,0.65);
+      color: #ddd;
+      font-size: 0.9rem;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-content: center;
+      align-items: flex-start;
     }
     .footer-left {
       max-width: 70%;
@@ -140,8 +197,8 @@
       <span>Hygeia New Concept</span>
     </div>
     <nav>
-      <a href="#">Marketing</a>
-      <a href="#">IT</a>
+      <a href="#marketing">Marketing</a>
+      <a href="#it">IT</a>
     </nav>
   </header>
 
@@ -150,6 +207,43 @@
     <h1>Innovating Digital Experiences</h1>
     <p>Hygeia New Concept builds stunning, responsive apps and websites tailored to modern business needs. We merge design and technology to deliver high-impact digital solutions that scale.</p>
   </div>
+
+  <!-- === IT SECTION === -->
+  <section id="it" class="content-section">
+    <h2>Information Technology</h2>
+
+    <div class="subsection" id="request-quota">
+      <h3>1. Request a Quota for Your App Idea</h3>
+      <p>Tell us what you have in mind and we'll get back with an estimate.</p>
+      <form id="quota-form" onsubmit="event.preventDefault(); alert('Thank you! We\'ve received your description.');">
+        <label for="app-desc">Brief description</label>
+        <textarea id="app-desc" rows="4" placeholder="Describe what your app should do..."></textarea>
+        <br>
+        <button type="submit" class="btn">Send Request</button>
+      </form>
+    </div>
+
+    <div class="subsection" id="our-products">
+      <h3>2. Our Apps &amp; Games</h3>
+      <ul>
+        <li><a class="btn" href="#" target="_blank">The Bezt Shaorma&nbsp;— mobile game</a></li>
+        <li><a class="btn" href="#" target="_blank">CoonBucks&nbsp;App</a></li>
+        <li><a class="btn" href="#" target="_blank">Lashmap&nbsp;App</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- === MARKETING SECTION === -->
+  <section id="marketing" class="content-section">
+    <h2>Marketing</h2>
+
+    <div class="subsection" id="digital-billboard">
+      <h3>Digital Billboard — Bulevardul Unirii 74, Bacău</h3>
+      <p>Advertise on our high‑visibility LED billboard located in one of the city\'s busiest intersections.</p>
+      <p><strong>Rate:</strong> 1&nbsp;500&nbsp;RON / month</p>
+      <a class="btn" href="mailto:contact@hygeianewconcept.com?subject=Digital%20Billboard%20Inquiry">I'm interested</a>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
