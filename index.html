@@ -164,93 +164,160 @@
   </footer>
 
   <script>
-    /* ---- Particle background (no mouse interaction) ---- */
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
+  /* ---- Particle background ---- */
+  const canvas = document.getElementById('particleCanvas');
+  const ctx    = canvas.getContext('2d');
 
-    function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width  = window.innerWidth  * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width  = window.innerWidth  + 'px';
-      canvas.style.height = window.innerHeight + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = window.innerWidth  * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width  = window.innerWidth  + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  /* Config */
+  const PARTICLE_COUNT = 120;
+  const LINK_DISTANCE  = 120;
+  const TRIANGLE_SIZE  = 5;
+  const PURPLE         = 'rgba(98,0,234,0.7)';
+  const GRAY           = 'rgba(153,153,153,0.4)';
+
+  let billboardLocked  = false;     // we only build the billboard on the first click
+
+  class Particle {
+    constructor () {
+      this.reset();
     }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    /* Config */
-    const PARTICLE_COUNT   = 120;
-    const LINK_DISTANCE    = 120;
-    const TRIANGLE_SIZE    = 5;
-    const PURPLE           = 'rgba(98,0,234,0.7)'; // 0.7 opacity
-    const GRAY             = 'rgba(153,153,153,0.4)';
-
-    class Particle {
-      constructor() {
-        this.x  = Math.random() * canvas.width;
-        this.y  = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
-        this.color = GRAY;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        // bounce
-        if (this.x < 0) { this.x = 0; this.vx *= -1; }
-        if (this.x > canvas.width)  { this.x = canvas.width; this.vx *= -1; }
-        if (this.y < 0) { this.y = 0; this.vy *= -1; }
-        if (this.y > canvas.height) { this.y = canvas.height; this.vy *= -1; }
-      }
-      drawTriangle() {
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y - TRIANGLE_SIZE);
-        ctx.lineTo(this.x - TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
-        ctx.lineTo(this.x + TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
-        ctx.closePath();
-        ctx.fillStyle = this.color;
-        ctx.fill();
-      }
+    reset() {
+      this.x  = Math.random() * canvas.width;
+      this.y  = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.6;
+      this.vy = (Math.random() - 0.5) * 0.6;
+      this.color   = GRAY;
+      this.pinned  = false;         // becomes true once chosen for the billboard
+      this.tx = this.ty = null;     // target position for billboard particles
     }
+    update () {
+      if (this.pinned) {
+        // ease toward target, then stop
+        const ease = 0.12;
+        this.x += (this.tx - this.x) * ease;
+        this.y += (this.ty - this.y) * ease;
 
-    const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
+        // snap & zero velocity when close enough
+        if (Math.hypot(this.tx - this.x, this.ty - this.y) < 0.8) {
+          this.x = this.tx;
+          this.y = this.ty;
+        }
+        return;      // no free motion / bouncing
+      }
 
-    function drawConnections() {
-      particles.forEach(p => p.color = GRAY);
-      for (let i = 0; i < particles.length; i++) {
-        const p1 = particles[i];
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < LINK_DISTANCE) {
-            ctx.strokeStyle = PURPLE;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
-            p1.color = PURPLE;
-            p2.color = PURPLE;
-          }
+      // normal wandering motion
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > canvas.width)  this.vx *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+    }
+    drawTriangle () {
+      ctx.beginPath();
+      ctx.moveTo(this.x,               this.y - TRIANGLE_SIZE);
+      ctx.lineTo(this.x - TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
+      ctx.lineTo(this.x + TRIANGLE_SIZE, this.y + TRIANGLE_SIZE);
+      ctx.closePath();
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+  }
+
+  const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
+
+  /* --- Connectivity lines --- */
+  function drawConnections () {
+    particles.forEach(p => p.color = p.pinned ? PURPLE : GRAY);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p1 = particles[i];
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+        if (dist < LINK_DISTANCE) {
+          ctx.strokeStyle = PURPLE;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+
+          p1.color = p2.color = PURPLE;
         }
       }
     }
+  }
 
-    function animate() {
-      ctx.fillStyle = '#0a0014';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+  /* --- First-click handler: build the billboard --- */
+  function buildBillboard () {
+    if (billboardLocked) return;
+    billboardLocked = true;
 
-      particles.forEach(p => p.update());
-      drawConnections();
-      particles.forEach(p => p.drawTriangle());
+    /* 1. choose random subset (≈ 2⁄3 of particles) */
+    const billboardParticles = particles
+      .filter(() => Math.random() < 0.66);
 
-      requestAnimationFrame(animate);
+    /* 2. work out billboard grid (16 × 5 roughly 80 cells) */
+    const cols = 16;
+    const rows = 5;
+    const cellX = canvas.width  * 0.6 / (cols - 1);
+    const cellY = canvas.height * 0.15 / (rows - 1);
+    const startX = (canvas.width  - cellX * (cols - 1)) / 2;
+    const startY = (canvas.height - cellY * (rows - 1)) / 2;
+
+    /* 3. generate grid coords & shuffle */
+    const grid = [];
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++)
+        grid.push({ x: startX + c * cellX, y: startY + r * cellY });
+
+    shuffle(grid);
+
+    /* 4. pin chosen particles & assign targets */
+    billboardParticles.forEach((p, i) => {
+      const { x, y } = grid[i % grid.length];
+      p.pinned = true;
+      p.tx = x;
+      p.ty = y;
+      p.color = PURPLE;
+      p.vx = p.vy = 0;
+    });
+  }
+
+  /* Fisher-Yates */
+  function shuffle (arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+    return arr;
+  }
 
-    animate();
-  </script>
+  /* ---- Animation loop ---- */
+  function animate () {
+    ctx.fillStyle = '#0a0014';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => p.update());
+    drawConnections();
+    particles.forEach(p => p.drawTriangle());
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  /* ---- click to trigger billboard ---- */
+  window.addEventListener('click', buildBillboard);
+</script>
 </body>
 </html>
